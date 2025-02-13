@@ -5,7 +5,6 @@ import Events from "./pages/Events"; //
 // import AboutProject from "./pages/AboutProject";
 
 import "./App.css";
-
 function App() {
   return (
     <Router>

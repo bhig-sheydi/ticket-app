@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { CloudUpload } from "lucide-react";
 
-
 const ProfilePictureUploader = ({ onUpload }) => {
     const [imageUrl, setImageUrl] = useState(localStorage.getItem("avatar") || "");
     const [error, setError] = useState("");
@@ -44,19 +43,19 @@ const ProfilePictureUploader = ({ onUpload }) => {
     };
 
     return (
-        <div className="flex flex-col items-center p-6 border rounded-lg w-full text-center border-[#07373F] relative space-y-4">
-            <p className="absolute top-2 left-2 text-white">Upload Profile Picture</p>
+        <div className="flex flex-col items-center p-6 border rounded-lg w-full max-w-sm md:max-w-md lg:max-w-lg text-center border-[#07373F] relative space-y-4">
+            <p className="absolute top-2 left-2 text-white text-sm md:text-base">Upload Profile Picture</p>
             <div className="bg-[#0A2A35] w-full flex justify-center relative mt-8 p-4 rounded-lg">
                 <div
-                    className="w-40 h-40 border-2 rounded-2xl flex items-center justify-center bg-[#0E464F] opacity-35 border-4 border-[#24A0B5] text-gray-500 cursor-pointer p-2"
+                    className="w-32 h-32 md:w-40 md:h-40 border-2 rounded-full flex items-center justify-center bg-[#0E464F] opacity-35 border-4 border-[#24A0B5] text-gray-500 cursor-pointer p-2"
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={handleDrop}
                 >
                     {imageUrl ? (
                         <img src={imageUrl} alt="Profile Preview" className="w-full h-full object-cover rounded-full" />
                     ) : (
-                        <div className="absolute top-0 bottom-0 flex flex-col items-center gap-3">
-                            <CloudUpload className="w-10 h-10 text-[#ffff]" />
+                        <div className="absolute top-0 bottom-0 flex flex-col items-center gap-3 text-xs md:text-sm">
+                            <CloudUpload className="w-8 h-8 md:w-10 md:h-10 text-[#ffff]" />
                             <p className="text-[#ffff]">Drag & Drop or Click to Upload</p>
                         </div>
                     )}
@@ -65,12 +64,12 @@ const ProfilePictureUploader = ({ onUpload }) => {
             <input
                 type="text"
                 placeholder="Or paste image URL"
-                className="mt-4 p-3 border rounded w-full"
+                className="mt-4 p-3 border rounded w-full text-xs md:text-sm"
                 onBlur={handleUrlUpload}
             />
-            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+            {error && <p className="text-red-500 text-xs md:text-sm mt-2">{error}</p>}
         </div>
     );
 };
 
-export default ProfilePictureUploader
+export default ProfilePictureUploader;
