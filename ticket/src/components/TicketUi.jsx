@@ -33,35 +33,30 @@ const TicketUi = () => {
     pricingOptions.find((option) => option.price == ticketDetails.selectedPrice)?.accessType || "N/A";
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center p-6 relative bg-[#0D2A30]">
-    
-      <div className="border border-[#24A0B5] p-2 relative rounded-xl shadow-lg">
-
+    <div className="min-h-screen flex flex-col justify-center items-center p-4 sm:p-6 bg-[#0D2A30] -full">
+      <div className="border border-[#24A0B5] p-2 sm:p-3 rounded-xl shadow-lg w-full max-w-sm sm:max-w-md">
         <div
-          className="border border-[#24A0B5] bg-[#133D44] text-white w-full max-w-md h-[500px] flex flex-col justify-between p-6 rounded-lg shadow-xl relative"
+          className="border border-[#24A0B5] bg-[#133D44] text-white w-full h-auto flex flex-col justify-between p-4 sm:p-6 rounded-lg shadow-xl relative"
           style={{
             clipPath: "polygon(0% 10px, 10px 0%, 100% 0%, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0% 100%)",
           }}
         >
-        
-          <h2 className="text-2xl font-extrabold text-center tracking-wider text-[#24A0B5]">
+          <h2 className="text-xl sm:text-2xl font-extrabold text-center tracking-wider text-[#24A0B5]">
             🎟️ EVENT TICKET 🎟️
           </h2>
 
-          
           {ticketDetails.profilePicture && (
-            <div className="flex justify-center">
+            <div className="flex justify-center mt-3">
               <img
                 src={ticketDetails.profilePicture}
                 alt="Profile"
-                className="w-16 h-16 rounded-full border-2 border-[#24A0B5] shadow-lg"
+                className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-[#24A0B5] shadow-lg"
               />
             </div>
           )}
 
-        
           <div className="mt-4">
-            <table className="w-full text-sm border-separate border-spacing-y-2">
+            <table className="w-full text-xs sm:text-sm border-separate border-spacing-y-2">
               <tbody>
                 <tr>
                   <td className="p-2 font-semibold text-gray-300">👤 Name:</td>
@@ -87,7 +82,7 @@ const TicketUi = () => {
             </table>
           </div>
 
-    
+       
         </div>
       </div>
     </div>
