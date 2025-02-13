@@ -1,0 +1,7 @@
+@import "tailwindcss";
+body {
+  background: radial-gradient(ellipse at bottom, rgba(10, 61, 68, 0.8) 10%, rgba(4, 30, 35, 1) 50%),
+              linear-gradient(to top, rgba(4, 30, 35, 1) 85%, transparent 95%);
+  background-size: cover;
+  background-attachment: fixed;
+}
