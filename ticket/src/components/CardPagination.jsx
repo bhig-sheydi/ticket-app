@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react"; 
-import { ChevronRight, ChevronLeft } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ChevronRight } from "lucide-react";
 import EventCard from "./EventCard";
 import PricingCard from "./PriceCard";
 import EventContainer from "./EventContainer";
 import TicketNumberSelector from "./TicketNumberSelector";
 import ProfilePictureUploader from "./ProfilePictureUploader";
 import EventForm from "./EventForm";
+import TicketUi from "./TicketUi"; // Import TicketUi component
 import TicketCard from "./TicketCard";
 
 const initialPricingOptions = [
@@ -26,9 +27,28 @@ const CardPagination = () => {
   const [selectedTickets, setSelectedTickets] = useState(
     localStorage.getItem("selectedTickets") ? parseInt(localStorage.getItem("selectedTickets")) : 1
   );
+
+
   const [error, setError] = useState("");
 
   const maxPage = 3;
+
+  const getValidPrice = (price) => {
+    return pricingOptions.find((option) => option.price === price)?.price || 0;
+  };
+
+  const totalCost = getValidPrice(selectedPrice) * selectedTickets;
+
+  useEffect(() => {
+    if (selectedPrice !== null) {
+      localStorage.setItem("selectedPrice", selectedPrice);
+    }
+  }, [selectedPrice]);
+
+  useEffect(() => {
+    localStorage.setItem("selectedTickets", selectedTickets);
+  }, [selectedTickets]);
+
 
   const handleNext = () => {
     if (page === 1) {
@@ -56,16 +76,10 @@ const CardPagination = () => {
     }
   };
 
-  const handlePrev = () => {
-    if (page > 1) {
-      setPage((prev) => prev - 1);
-    }
-  };
-
   return (
-    <div className="w-[95%] sm:w-[80%] md:w-[65%] lg:w-[60%] min-h-[400px] sm:min-h-[500px] md:min-h-[600px] mx-auto p-6 sm:p-8 md:p-10 lg:p-12 border-2 border-[#0E464F] rounded-[2rem] relative flex flex-col justify-between shadow-md shadow-[#0E464F]/50">
+    <div className="w-[90%] sm:w-[75%] md:w-[65%] lg:w-[60%] min-h-[400px] sm:min-h-[500px] md:min-h-[600px] mx-auto p-6 sm:p-8 md:p-10 lg:p-12 border-2 border-[#0E464F] rounded-[2rem] relative flex flex-col justify-between shadow-md shadow-[#0E464F]/50">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-        <h1 className="text-2xl sm:text-3xl font-bold text-white roboto-slab">Ticket Selection</h1>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Ticket Selection</h1>
         <span className="text-lg sm:text-xl font-bold text-gray-400 mt-2 sm:mt-0">
           Step {page} / {maxPage}
         </span>
@@ -83,7 +97,7 @@ const CardPagination = () => {
           <>
             <EventCard />
             <EventContainer>
-              <h2 className="text-2xl font-bold text-white text-center mb-4 roboto-slab">Select ticket type</h2>
+              <h2 className="text-2xl font-bold text-white text-center mb-4">Select ticket type</h2>
               <div className="flex flex-col md:flex-row justify-center gap-4">
                 {pricingOptions.map((option) => (
                   <PricingCard
@@ -110,7 +124,7 @@ const CardPagination = () => {
               </div>
               {selectedPrice !== null && (
                 <p className="mt-4 text-lg text-white font-bold">
-                  Total Cost: <span className="text-green-400">${(selectedPrice * selectedTickets).toFixed(2)}</span>
+                  Total Cost: <span className="text-green-400">${totalCost.toFixed(2)}</span>
                 </p>
               )}
               {error && <p className="text-red-500 text-sm mt-3">{error}</p>}
@@ -118,34 +132,23 @@ const CardPagination = () => {
           </>
         ) : page === 2 ? (
           <>
-            <ProfilePictureUploader />
+            <ProfilePictureUploader onUpload={(image) => setProfilePicture(image)} />
             <div className="flex justify-center w-full">
-              <EventForm />
+              <EventForm onSave={(data) => setEventData(data)} />
             </div>
           </>
         ) : (
-          <TicketCard />
+          <TicketCard/>
         )}
       </div>
 
-  
-      <div className="flex justify-center gap-10 items-center mt-4 pl-30 pr-50">
-        <button
-          onClick={handlePrev}
-          className={`py-2 px-4 rounded w-full bg-[#24A0B5] h-10 flex items-center transition-all ${page === 1 ? "opacity-50 cursor-not-allowed bg-gray-500" : "bg-gray-500 text-white hover:bg-gray-600"}`}
-          disabled={page === 1}
-        >
-          <ChevronLeft className="w-4 h-4 mr-2" /> Prev
-        </button>
-
-        <button
-          onClick={handleNext}
-          className={`py-2 px-4 rounded h-10  flex w-full items-center transition-all ${page === maxPage ? "opacity-50 cursor-not-allowed bg-gray-500" : " bg-[#24A0B5] text-white hover:bg-blue-600"}`}
-          disabled={page === maxPage}
-        >
-          Next <ChevronRight className="w-4 h-4 ml-2" />
-        </button>
-      </div>
+      <button
+        onClick={handleNext}
+        className={`mt-4 py-2 px-4 rounded flex items-center mx-auto transition-all ${page === maxPage ? "opacity-50 cursor-not-allowed bg-gray-500" : "bg-blue-500 text-white hover:bg-blue-600"}`}
+        disabled={page === maxPage}
+      >
+        Next <ChevronRight className="w-4 h-4 ml-2" />
+      </button>
     </div>
   );
 };

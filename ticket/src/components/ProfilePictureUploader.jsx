@@ -1,18 +1,23 @@
 import { useState, useEffect } from "react";
 import { CloudUpload } from "lucide-react";
-import Dialog from "./Dialog"; 
+import Dialog from "./Dialog";
+import { useAuthContext } from "../contexts/AuthContext"; 
+
 
 const ProfilePictureUploader = ({ onUpload }) => {
+    const { setIsGoodToGo } = useAuthContext(); 
     const [imageUrl, setImageUrl] = useState(localStorage.getItem("avatar") || "");
     const [dragging, setDragging] = useState(false);
     const [error, setError] = useState("");
     const [dialogOpen, setDialogOpen] = useState(false);
 
     useEffect(() => {
+        setIsGoodToGo(false)
         if (imageUrl) {
             localStorage.setItem("avatar", imageUrl);
+            setIsGoodToGo(true); 
         }
-    }, [imageUrl]);
+    }, [imageUrl, setIsGoodToGo]);
 
     const handleDragOver = (event) => {
         event.preventDefault();
@@ -105,7 +110,6 @@ const ProfilePictureUploader = ({ onUpload }) => {
                 className="mt-4 p-3 border rounded w-full text-xs md:text-sm"
                 onBlur={handleUrlUpload}
             />
-            
             
             {dialogOpen && (
                 <Dialog
