@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, ChevronLeft } from "lucide-react"; // Import ChevronLeft for the previous button
 import EventCard from "./EventCard";
 import PricingCard from "./PriceCard";
 import EventContainer from "./EventContainer";
@@ -28,7 +28,6 @@ const CardPagination = () => {
     localStorage.getItem("selectedTickets") ? parseInt(localStorage.getItem("selectedTickets")) : 1
   );
 
-
   const [error, setError] = useState("");
 
   const maxPage = 3;
@@ -48,7 +47,6 @@ const CardPagination = () => {
   useEffect(() => {
     localStorage.setItem("selectedTickets", selectedTickets);
   }, [selectedTickets]);
-
 
   const handleNext = () => {
     if (page === 1) {
@@ -73,6 +71,12 @@ const CardPagination = () => {
     setError("");
     if (page < maxPage) {
       setPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (page > 1) {
+      setPage((prev) => prev - 1);
     }
   };
 
@@ -142,13 +146,22 @@ const CardPagination = () => {
         )}
       </div>
 
-      <button
-        onClick={handleNext}
-        className={`mt-4 py-2 px-4 rounded flex items-center mx-auto transition-all ${page === maxPage ? "opacity-50 cursor-not-allowed bg-gray-500" : "bg-blue-500 text-white hover:bg-blue-600"}`}
-        disabled={page === maxPage}
-      >
-        Next <ChevronRight className="w-4 h-4 ml-2" />
-      </button>
+      <div className="flex justify-between mt-4">
+        <button
+          onClick={handlePrevious}
+          className={`py-2 px-4 rounded flex items-center transition-all ${page === 1 ? "opacity-50 cursor-not-allowed bg-gray-500" : "bg-blue-500 text-white hover:bg-blue-600"}`}
+          disabled={page === 1}
+        >
+          <ChevronLeft className="w-4 h-4 mr-2" /> Previous
+        </button>
+        <button
+          onClick={handleNext}
+          className={`py-2 px-4 rounded flex items-center transition-all ${page === maxPage ? "opacity-50 cursor-not-allowed bg-gray-500" : "bg-blue-500 text-white hover:bg-blue-600"}`}
+          disabled={page === maxPage}
+        >
+          Next <ChevronRight className="w-4 h-4 ml-2" />
+        </button>
+      </div>
     </div>
   );
 };
