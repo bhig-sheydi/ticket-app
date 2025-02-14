@@ -128,7 +128,7 @@ const CardPagination = () => {
         )}
       </div>
 
-      {/* Buttons */}
+  
       <div className="flex justify-between items-center mt-4">
         <button
           onClick={handlePrev}
