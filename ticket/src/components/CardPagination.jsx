@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { ChevronRight } from "lucide-react";
+import { useState, useEffect } from "react"; 
+import { ChevronRight, ChevronLeft } from "lucide-react";
 import EventCard from "./EventCard";
 import PricingCard from "./PriceCard";
 import EventContainer from "./EventContainer";
@@ -26,28 +26,9 @@ const CardPagination = () => {
   const [selectedTickets, setSelectedTickets] = useState(
     localStorage.getItem("selectedTickets") ? parseInt(localStorage.getItem("selectedTickets")) : 1
   );
-
-
   const [error, setError] = useState("");
 
   const maxPage = 3;
-
-  const getValidPrice = (price) => {
-    return pricingOptions.find((option) => option.price === price)?.price || 0;
-  };
-
-  const totalCost = getValidPrice(selectedPrice) * selectedTickets;
-
-  useEffect(() => {
-    if (selectedPrice !== null) {
-      localStorage.setItem("selectedPrice", selectedPrice);
-    }
-  }, [selectedPrice]);
-
-  useEffect(() => {
-    localStorage.setItem("selectedTickets", selectedTickets);
-  }, [selectedTickets]);
-
 
   const handleNext = () => {
     if (page === 1) {
@@ -72,6 +53,12 @@ const CardPagination = () => {
     setError("");
     if (page < maxPage) {
       setPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (page > 1) {
+      setPage((prev) => prev - 1);
     }
   };
 
@@ -123,7 +110,7 @@ const CardPagination = () => {
               </div>
               {selectedPrice !== null && (
                 <p className="mt-4 text-lg text-white font-bold">
-                  Total Cost: <span className="text-green-400">${totalCost.toFixed(2)}</span>
+                  Total Cost: <span className="text-green-400">${(selectedPrice * selectedTickets).toFixed(2)}</span>
                 </p>
               )}
               {error && <p className="text-red-500 text-sm mt-3">{error}</p>}
@@ -131,23 +118,34 @@ const CardPagination = () => {
           </>
         ) : page === 2 ? (
           <>
-            <ProfilePictureUploader onUpload={(image) => setProfilePicture(image)} />
+            <ProfilePictureUploader />
             <div className="flex justify-center w-full">
-              <EventForm onSave={(data) => setEventData(data)} />
+              <EventForm />
             </div>
           </>
         ) : (
-          <TicketCard/>
+          <TicketCard />
         )}
       </div>
 
-      <button
-        onClick={handleNext}
-        className={`mt-4 py-2 px-4 rounded flex items-center mx-auto transition-all ${page === maxPage ? "opacity-50 cursor-not-allowed bg-gray-500" : "bg-blue-500 text-white hover:bg-blue-600"}`}
-        disabled={page === maxPage}
-      >
-        Next <ChevronRight className="w-4 h-4 ml-2" />
-      </button>
+      {/* Buttons */}
+      <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={handlePrev}
+          className={`py-2 px-4 rounded flex items-center transition-all ${page === 1 ? "opacity-50 cursor-not-allowed bg-gray-500" : "bg-gray-500 text-white hover:bg-gray-600"}`}
+          disabled={page === 1}
+        >
+          <ChevronLeft className="w-4 h-4 mr-2" /> Prev
+        </button>
+
+        <button
+          onClick={handleNext}
+          className={`py-2 px-4 rounded flex items-center transition-all ${page === maxPage ? "opacity-50 cursor-not-allowed bg-gray-500" : "bg-blue-500 text-white hover:bg-blue-600"}`}
+          disabled={page === maxPage}
+        >
+          Next <ChevronRight className="w-4 h-4 ml-2" />
+        </button>
+      </div>
     </div>
   );
 };
