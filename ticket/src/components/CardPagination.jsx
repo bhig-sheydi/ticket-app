@@ -65,7 +65,7 @@ const CardPagination = () => {
   return (
     <div className="w-[95%] sm:w-[80%] md:w-[65%] lg:w-[60%] min-h-[400px] sm:min-h-[500px] md:min-h-[600px] mx-auto p-6 sm:p-8 md:p-10 lg:p-12 border-2 border-[#0E464F] rounded-[2rem] relative flex flex-col justify-between shadow-md shadow-[#0E464F]/50">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Ticket Selection</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-white roboto-slab">Ticket Selection</h1>
         <span className="text-lg sm:text-xl font-bold text-gray-400 mt-2 sm:mt-0">
           Step {page} / {maxPage}
         </span>
@@ -83,7 +83,7 @@ const CardPagination = () => {
           <>
             <EventCard />
             <EventContainer>
-              <h2 className="text-2xl font-bold text-white text-center mb-4">Select ticket type</h2>
+              <h2 className="text-2xl font-bold text-white text-center mb-4 roboto-slab">Select ticket type</h2>
               <div className="flex flex-col md:flex-row justify-center gap-4">
                 {pricingOptions.map((option) => (
                   <PricingCard

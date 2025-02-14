@@ -17,10 +17,10 @@ const EventCard = () => {
       <h1 className="text-4xl sm:text-5xl font-bold relative z-10 roadRage">
         Techember Fest ’25
       </h1>
-      <p className="mt-2 text-gray-300  relative z-10 text-[#FAFAFA] text-sm sm:text-base font-roadRage">
+      <p className="mt-2 text-gray-300  roboto relative z-10 text-[#FAFAFA] text-sm sm:text-base font-roadRage">
         Join us for an unforgettable experience at [Event Name]! Secure your spot now.
       </p>
-      <p className="mt-2 text-gray-400 relative z-10 text-xs sm:text-sm">
+      <p className="mt-2 roboto text-gray-400 relative z-10 text-xs sm:text-sm">
         March 15, 2025 | 7:00 PM
       </p>
     </div>

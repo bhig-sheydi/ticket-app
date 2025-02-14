@@ -6,9 +6,20 @@ body {
   background-attachment: fixed;
 }
 
-
-@import url('https://fonts.googleapis.com/css2?family=Road+Rage&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Road+Rage&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 .roadRage {
   font-family: 'Road Rage', cursive;
+}
+
+.roboto {
+  font-family: 'Roboto', sans-serif;
+}
+
+
+.roboto-slab {
+  font-family: 'Roboto Slab', serif;
+}
+
+body{
+  font-family: 'Roboto', sans-serif;
 }
