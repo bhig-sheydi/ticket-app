@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";  
+import { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 import EventCard from "./EventCard";
 import PricingCard from "./PriceCard";
 import EventContainer from "./EventContainer";
 import TicketNumberSelector from "./TicketNumberSelector";
 import ProfilePictureUploader from "./ProfilePictureUploader";
-import EventForm from "./EventForm"; 
+import EventForm from "./EventForm";
 import TicketUi from "./TicketUi"; // Import TicketUi component
 
 const initialPricingOptions = [
@@ -26,8 +26,13 @@ const CardPagination = () => {
   const [selectedTickets, setSelectedTickets] = useState(
     localStorage.getItem("selectedTickets") ? parseInt(localStorage.getItem("selectedTickets")) : 1
   );
+  const [profilePicture, setProfilePicture] = useState(
+    localStorage.getItem("profilePicture") ? localStorage.getItem("profilePicture") : null
+  );
+  const [eventData, setEventData] = useState(
+    localStorage.getItem("eventData") ? JSON.parse(localStorage.getItem("eventData")) : {}
+  );
   const [error, setError] = useState("");
-  const [profilePicture, setProfilePicture] = useState(null);
 
   const maxPage = 3;
 
@@ -46,6 +51,18 @@ const CardPagination = () => {
   useEffect(() => {
     localStorage.setItem("selectedTickets", selectedTickets);
   }, [selectedTickets]);
+
+  useEffect(() => {
+    if (profilePicture) {
+      localStorage.setItem("profilePicture", profilePicture);
+    }
+  }, [profilePicture]);
+
+  useEffect(() => {
+    if (Object.keys(eventData).length > 0) {
+      localStorage.setItem("eventData", JSON.stringify(eventData));
+    }
+  }, [eventData]);
 
   const handleNext = () => {
     if (page === 1) {
@@ -74,12 +91,7 @@ const CardPagination = () => {
   };
 
   return (
-    <div
-      className="w-[90%] sm:w-[75%] md:w-[65%] lg:w-[60%] min-h-[400px] sm:min-h-[500px] md:min-h-[600px] mx-auto p-6 sm:p-8 md:p-10 lg:p-12 border-2 border-[#0E464F] rounded-[2rem] relative flex flex-col justify-between shadow-md shadow-[#0E464F]/50"
-      style={{
-        background: `radial-gradient(circle at top left, rgba(10, 60, 70, 1) 25%, #041E23 75%)`,
-      }}
-    >
+    <div className="w-[90%] sm:w-[75%] md:w-[65%] lg:w-[60%] min-h-[400px] sm:min-h-[500px] md:min-h-[600px] mx-auto p-6 sm:p-8 md:p-10 lg:p-12 border-2 border-[#0E464F] rounded-[2rem] relative flex flex-col justify-between shadow-md shadow-[#0E464F]/50">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
         <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Ticket Selection</h1>
         <span className="text-lg sm:text-xl font-bold text-gray-400 mt-2 sm:mt-0">
@@ -136,19 +148,26 @@ const CardPagination = () => {
           <>
             <ProfilePictureUploader onUpload={(image) => setProfilePicture(image)} />
             <div className="flex justify-center w-full">
-            <EventForm /> 
-              </div>
+              <EventForm onSave={(data) => setEventData(data)} />
+            </div>
           </>
         ) : (
-          <TicketUi />
+          <TicketUi
+            selectedPrice={selectedPrice}
+            selectedTickets={selectedTickets}
+            profilePicture={profilePicture}
+            eventData={eventData}
+            ticketType={
+              pricingOptions.find((option) => option.price === selectedPrice)?.accessType ||
+              (selectedPrice === 0 ? "Regular Access" : selectedPrice === 100 ? "Premium Access" : "VIP Access")
+            }
+          />
         )}
       </div>
 
       <button
         onClick={handleNext}
-        className={`mt-4 py-2 px-4 rounded flex items-center mx-auto transition-all ${
-          page === maxPage ? "opacity-50 cursor-not-allowed bg-gray-500" : "bg-blue-500 text-white hover:bg-blue-600"
-        }`}
+        className={`mt-4 py-2 px-4 rounded flex items-center mx-auto transition-all ${page === maxPage ? "opacity-50 cursor-not-allowed bg-gray-500" : "bg-blue-500 text-white hover:bg-blue-600"}`}
         disabled={page === maxPage}
       >
         Next <ChevronRight className="w-4 h-4 ml-2" />

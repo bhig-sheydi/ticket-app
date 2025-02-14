@@ -1,89 +1,71 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react"; 
+import { FaMapMarkerAlt, FaCalendarAlt } from "react-icons/fa";
 
 const TicketUi = () => {
-  const pricingOptions = [
-    { price: 0, accessType: "Regular Access" },
-    { price: 150, accessType: "VIP Access" },
-    { price: 100, accessType: "Premium Access" },
-  ];
+  const getStoredTicket = () => {
+    const storedTicket = JSON.parse(localStorage.getItem("eventTicket")) || {};
+    const name = localStorage.getItem("name") || storedTicket.name || "";
+    const email = localStorage.getItem("email") || storedTicket.email || "";
+    const ticketFor = localStorage.getItem("selectedTickets") || storedTicket.ticketType || "";
+    const specialRequest = localStorage.getItem("specialRequests") || storedTicket.specialRequest || "";
+    const profilePicture = localStorage.getItem("avatar") || "https://via.placeholder.com/150";
+    const ticketType = localStorage.getItem("selectedPrice");
 
-  const [ticketDetails, setTicketDetails] = useState({
-    selectedPrice: "N/A",
-    selectedTickets: "1",
-    profilePicture: "",
-    totalCost: "0.00",
-    name: "",
-    email: "",
-    specialRequests: "",
-  });
+    const ticketTypeLabel =
+      ticketType === "100" ? "VIP" : ticketType === "150" ? "VVIP" : ticketType === "free" ? "Regular" : "N/A";
+
+    return {
+      eventName: "Techember Fest '25",
+      location: "04 Rumens road, Ikoyi, Lagos",
+      date: "March 15, 2025 | 7:00 PM",
+      barcode: "1 234 567 891 026",
+      name,
+      email,
+      ticketType: ticketTypeLabel,
+      specialRequest,
+      profilePicture,
+      ticketFor,
+    };
+  };
+
+  const [ticket, setTicket] = useState(getStoredTicket);
 
   useEffect(() => {
-    setTicketDetails({
-      selectedPrice: localStorage.getItem("selectedPrice") || "N/A",
-      selectedTickets: localStorage.getItem("selectedTickets") || "1",
-      profilePicture: localStorage.getItem("avatar") || "",
-      totalCost: localStorage.getItem("totalCost") || "0.00",
-      name: localStorage.getItem("name") || "Not Provided",
-      email: localStorage.getItem("email") || "Not Provided",
-      specialRequests: localStorage.getItem("specialRequests") || "None",
-    });
+    setTicket(getStoredTicket());
   }, []);
 
-  const selectedAccessType =
-    pricingOptions.find((option) => option.price == ticketDetails.selectedPrice)?.accessType || "N/A";
-
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center p-4 sm:p-6 bg-[#0D2A30] -full">
-      <div className="border border-[#24A0B5] p-2 sm:p-3 rounded-xl shadow-lg w-full max-w-sm sm:max-w-md">
-        <div
-          className="border border-[#24A0B5] bg-[#133D44] text-white w-full h-auto flex flex-col justify-between p-4 sm:p-6 rounded-lg shadow-xl relative"
-          style={{
-            clipPath: "polygon(0% 10px, 10px 0%, 100% 0%, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0% 100%)",
-          }}
-        >
-          <h2 className="text-xl sm:text-2xl font-extrabold text-center tracking-wider text-[#24A0B5]">
-            🎟️ EVENT TICKET 🎟️
-          </h2>
+    <div className="relative bg-transparent p-6 rounded-xl shadow-lg border border-[#1e3a5f] w-[90%] max-w-sm text-white">
+      <h2 className="text-xl font-bold text-center">{ticket.eventName}</h2>
 
-          {ticketDetails.profilePicture && (
-            <div className="flex justify-center mt-3">
-              <img
-                src={ticketDetails.profilePicture}
-                alt="Profile"
-                className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-[#24A0B5] shadow-lg"
-              />
-            </div>
-          )}
+      <div className="flex items-center justify-center gap-2 text-gray-400 text-sm mt-3">
+        <FaMapMarkerAlt /> <span>{ticket.location}</span>
+      </div>
 
-          <div className="mt-4">
-            <table className="w-full text-xs sm:text-sm border-separate border-spacing-y-2">
-              <tbody>
-                <tr>
-                  <td className="p-2 font-semibold text-gray-300">👤 Name:</td>
-                  <td className="p-2 text-right text-white">{ticketDetails.name}</td>
-                </tr>
-                <tr>
-                  <td className="p-2 font-semibold text-gray-300">📧 Email:</td>
-                  <td className="p-2 text-right text-white">{ticketDetails.email}</td>
-                </tr>
-                <tr>
-                  <td className="p-2 font-semibold text-gray-300">🎫 Access Type:</td>
-                  <td className="p-2 text-right text-[#24A0B5] font-bold">{selectedAccessType}</td>
-                </tr>
-                <tr>
-                  <td className="p-2 font-semibold text-gray-300">🎟️ Tickets:</td>
-                  <td className="p-2 text-right text-white">{ticketDetails.selectedTickets}</td>
-                </tr>
-                <tr>
-                  <td className="p-2 font-semibold text-gray-300">💰 Total Cost:</td>
-                  <td className="p-2 text-right text-green-400 font-bold">${ticketDetails.totalCost}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      <div className="flex items-center justify-center gap-2 text-gray-400 text-sm mt-1">
+        <FaCalendarAlt /> <span>{ticket.date}</span>
+      </div>
 
-       
-        </div>
+      <div className="mt-4 flex justify-center">
+        <img
+          src={ticket.profilePicture}
+          alt="User"
+          className="w-20 h-20 object-cover rounded-lg border-2 border-[#1e3a5f]"
+        />
+      </div>
+
+      <div className="mt-4 bg-[#102b47] p-4 rounded-lg text-sm">
+        <p><strong>Name:</strong> {ticket.name || "N/A"}</p>
+        <p><strong>Email:</strong> {ticket.email || "N/A"}</p>
+        <p><strong>Ticket Type:</strong> {ticket.ticketType}</p>
+        <p><strong>Ticket for:</strong> {ticket.ticketFor || "N/A"}</p>
+
+        <p className="mt-2"><strong>Special Request:</strong></p>
+        <textarea
+          className="w-full bg-transparent border border-gray-600 p-2 rounded-lg text-white resize-none text-sm h-14"
+          value={ticket.specialRequest || "No special request"}
+          readOnly
+        />
       </div>
     </div>
   );

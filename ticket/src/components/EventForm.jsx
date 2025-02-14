@@ -1,22 +1,23 @@
 import { useState, useEffect } from "react";
-import EventContainer from "./EventContainer"; 
+import EventContainer from "./EventContainer";
 
 const EventForm = () => {
+  const getStoredValue = (key) => localStorage.getItem(key) || "";
+
   const [formData, setFormData] = useState({
-    name: localStorage.getItem("name") || "",
-    email: localStorage.getItem("email") || "",
-    specialRequests: localStorage.getItem("specialRequests") || "",
+    name: getStoredValue("name"),
+    email: getStoredValue("email"),
+    specialRequests: getStoredValue("specialRequests"),
   });
 
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-  });
+  const [errors, setErrors] = useState({ name: "", email: "" });
 
   useEffect(() => {
-    localStorage.setItem("name", formData.name);
-    localStorage.setItem("email", formData.email);
-    localStorage.setItem("specialRequests", formData.specialRequests);
+    Object.keys(formData).forEach((key) => {
+      if (formData[key] !== localStorage.getItem(key)) {
+        localStorage.setItem(key, formData[key]);
+      }
+    });
   }, [formData]);
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -56,13 +57,17 @@ const EventForm = () => {
   return (
     <EventContainer>
       <form
-        className="p-6 border border-[#71A7AF] rounded-2xl w-full max-w-md bg-gradient-to-br from-[#133D44] via-[#12464E] to-[#71A7AF] shadow-lg text-white"
+        className="p-6 border border-[#71A7AF] rounded-2xl w-full max-w-lg bg-[#133D44] shadow-lg text-white space-y-4 md:space-y-6"
         onSubmit={handleSubmit}
       >
-        <h2 className="text-2xl font-bold text-center mb-6">🎟 Register for the Event</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-center">
+          🎟 Register for the Event
+        </h2>
 
-        <div className="mb-4">
-          <label htmlFor="name" className="block font-medium mb-1">Full Name</label>
+        <div>
+          <label htmlFor="name" className="block font-medium mb-1">
+            Full Name
+          </label>
           <input
             type="text"
             id="name"
@@ -76,9 +81,10 @@ const EventForm = () => {
           {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
         </div>
 
-
-        <div className="mb-4">
-          <label htmlFor="email" className="block font-medium mb-1">Email Address</label>
+        <div>
+          <label htmlFor="email" className="block font-medium mb-1">
+            Email Address
+          </label>
           <input
             type="email"
             id="email"
@@ -92,9 +98,10 @@ const EventForm = () => {
           {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
         </div>
 
-    
-        <div className="mb-4">
-          <label htmlFor="specialRequests" className="block font-medium mb-1">Special Requests</label>
+        <div>
+          <label htmlFor="specialRequests" className="block font-medium mb-1">
+            Special Requests
+          </label>
           <textarea
             id="specialRequests"
             name="specialRequests"
@@ -105,7 +112,6 @@ const EventForm = () => {
           />
         </div>
 
-    
         <button
           type="submit"
           className="w-full bg-[#24A0B5] hover:bg-[#1B7C91] transition-all duration-300 text-white font-semibold p-3 rounded-lg shadow-md"
