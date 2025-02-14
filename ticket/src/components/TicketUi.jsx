@@ -36,7 +36,7 @@ const TicketUi = () => {
 
   return (
     <div className="relative bg-transparent p-4 rounded-xl shadow-lg border border-[#1e3a5f] w-[90%] max-w-sm text-white h-[420px] sm:h-[450px]">
-      <h2 className="text-[10px] font-normal text-center">{ticket.eventName}</h2>
+      <h2 className="text-xl font-normal text-center">{ticket.eventName}</h2>
 
       <div className="flex items-center justify-center gap-1 text-gray-400 text-[10px] mt-3">
         <FaMapMarkerAlt /> <span>{ticket.location}</span>
@@ -46,11 +46,11 @@ const TicketUi = () => {
         <FaCalendarAlt /> <span>{ticket.date}</span>
       </div>
 
-      <div className="mt-4 flex justify-center">
+      <div className="mt-4 flex justify-center w-full">
         <img
           src={ticket.profilePicture}
           alt="User"
-          className="w-14 h-14 object-cover rounded-lg border-2 border-[#1e3a5f]"
+          className="w-25 h-25 object-cover rounded-lg border-2 border-[#1e3a5f]"
         />
       </div>
 
