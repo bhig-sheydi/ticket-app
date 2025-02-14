@@ -39,7 +39,8 @@ const TicketCard = () => {
     return (
         <div className="flex items-center justify-center relative w-full">
           <div className="relative">
-            <img src={ticketFrame} alt="Ticket Frame" className="w-full h-auto" />
+          <img src={ticketFrame} alt="Ticket Frame" className="w-full h-auto max-w-[414px]" />
+
       
             
             <div className="absolute top-[3%] left-0 w-full h-full flex flex-col items-center justify-center">
