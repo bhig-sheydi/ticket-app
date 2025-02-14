@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Dialog from "./Dialog";
 
 const EventForm = ({ onNext }) => {
@@ -10,9 +10,16 @@ const EventForm = ({ onNext }) => {
     specialRequests: getStoredValue("specialRequests"),
   });
 
-  const [errors, setErrors] = useState({ name: "", email: "", specialRequests: "" });
+  const [errors, setErrors] = useState({});
   const [dialogMessage, setDialogMessage] = useState("");
   const [showDialog, setShowDialog] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState(0);
+
+  const inputRefs = [useRef(), useRef(), useRef(), useRef()];
+
+  useEffect(() => {
+    inputRefs[focusedIndex]?.current?.focus();
+  }, [focusedIndex]);
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -30,6 +37,16 @@ const EventForm = ({ onNext }) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === "ArrowDown") {
+      setFocusedIndex((prev) => Math.min(prev + 1, inputRefs.length - 1));
+    } else if (e.key === "ArrowUp") {
+      setFocusedIndex((prev) => Math.max(prev - 1, 0));
+    } else if (e.key === "Enter" && index === inputRefs.length - 1) {
+      handleNext(e);
+    }
   };
 
   const handleNext = (e) => {
@@ -65,12 +82,13 @@ const EventForm = ({ onNext }) => {
             type="text"
             id="name"
             name="name"
+            ref={inputRefs[0]}
             value={formData.name}
             onChange={handleChange}
-            className="w-full p-3 border border-[#24A0B5] rounded-lg bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#24A0B5]"
+            onKeyDown={(e) => handleKeyDown(e, 0)}
+            className="w-full p-3 border border-[#24A0B5] rounded-lg bg-transparent text-white"
             placeholder="Enter your full name"
           />
-          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
         </div>
 
         <div className="text-left">
@@ -79,12 +97,13 @@ const EventForm = ({ onNext }) => {
             type="email"
             id="email"
             name="email"
+            ref={inputRefs[1]}
             value={formData.email}
             onChange={handleChange}
-            className="w-full p-3 border border-[#24A0B5] rounded-lg bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#24A0B5]"
+            onKeyDown={(e) => handleKeyDown(e, 1)}
+            className="w-full p-3 border border-[#24A0B5] rounded-lg bg-transparent text-white"
             placeholder="Enter your email"
           />
-          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
         </div>
 
         <div className="text-left">
@@ -92,17 +111,20 @@ const EventForm = ({ onNext }) => {
           <textarea
             id="specialRequests"
             name="specialRequests"
+            ref={inputRefs[2]}
             value={formData.specialRequests}
             onChange={handleChange}
-            className="w-full p-3 border border-[#24A0B5] rounded-lg bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#24A0B5] h-32"
+            onKeyDown={(e) => handleKeyDown(e, 2)}
+            className="w-full p-3 border border-[#24A0B5] rounded-lg bg-transparent text-white h-32"
             placeholder="Any special requests?"
           />
-          {errors.specialRequests && <p className="text-red-500 text-sm mt-1">{errors.specialRequests}</p>}
         </div>
 
         <div className="text-center">
           <button
             type="submit"
+            ref={inputRefs[3]}
+            onKeyDown={(e) => handleKeyDown(e, 3)}
             className="mt-4 py-2 px-6 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition"
           >
             Submit
