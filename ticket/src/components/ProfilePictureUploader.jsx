@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react"; 
+import { useState, useEffect } from "react";
 import { CloudUpload } from "lucide-react";
+import Dialog from "./Dialog"; 
 
 const ProfilePictureUploader = ({ onUpload }) => {
     const [imageUrl, setImageUrl] = useState(localStorage.getItem("avatar") || "");
     const [dragging, setDragging] = useState(false);
     const [error, setError] = useState("");
+    const [dialogOpen, setDialogOpen] = useState(false);
 
     useEffect(() => {
         if (imageUrl) {
@@ -31,6 +33,12 @@ const ProfilePictureUploader = ({ onUpload }) => {
     const handleFileUpload = (file) => {
         if (!file || !file.type.startsWith("image/")) {
             setError("Please upload a valid image file.");
+            setDialogOpen(true);
+            return;
+        }
+        if (file.size > 2 * 1024 * 1024) {
+            setError("File size must be under 2MB.");
+            setDialogOpen(true);
             return;
         }
         const reader = new FileReader();
@@ -50,6 +58,7 @@ const ProfilePictureUploader = ({ onUpload }) => {
             setError("");
         } else {
             setError("Please enter a valid Cloudinary or external image URL.");
+            setDialogOpen(true);
         }
     };
 
@@ -96,7 +105,16 @@ const ProfilePictureUploader = ({ onUpload }) => {
                 className="mt-4 p-3 border rounded w-full text-xs md:text-sm"
                 onBlur={handleUrlUpload}
             />
-            {error && <p className="text-red-500 text-xs md:text-sm mt-2">{error}</p>}
+            
+            
+            {dialogOpen && (
+                <Dialog
+                    open={dialogOpen}
+                    onClose={() => setDialogOpen(false)}
+                    title="Upload Error"
+                    message={error}
+                />
+            )}
         </div>
     );
 };
