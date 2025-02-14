@@ -7,6 +7,7 @@ import TicketNumberSelector from "./TicketNumberSelector";
 import ProfilePictureUploader from "./ProfilePictureUploader";
 import EventForm from "./EventForm";
 import TicketUi from "./TicketUi"; // Import TicketUi component
+import TicketCard from "./TicketCard";
 
 const initialPricingOptions = [
   { id: 1, price: 0, accessType: "Regular Access", ticketsSold: 20, totalTickets: 52 },
@@ -47,7 +48,6 @@ const CardPagination = () => {
   useEffect(() => {
     localStorage.setItem("selectedTickets", selectedTickets);
   }, [selectedTickets]);
-
 
 
   const handleNext = () => {
@@ -138,7 +138,7 @@ const CardPagination = () => {
             </div>
           </>
         ) : (
-          <TicketUi/>
+          <TicketCard/>
         )}
       </div>
 
