@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
-import { ChevronRight, ChevronLeft } from "lucide-react"; // Import ChevronLeft for the previous button
+import { ChevronRight, ChevronLeft } from "lucide-react";
 import EventCard from "./EventCard";
 import PricingCard from "./PriceCard";
 import EventContainer from "./EventContainer";
 import TicketNumberSelector from "./TicketNumberSelector";
 import ProfilePictureUploader from "./ProfilePictureUploader";
 import EventForm from "./EventForm";
-import TicketUi from "./TicketUi"; // Import TicketUi component
+import TicketUi from "./TicketUi";
 import TicketCard from "./TicketCard";
+import { useAuthContext } from "../contexts/AuthContext";
 
 const initialPricingOptions = [
   { id: 1, price: 0, accessType: "Regular Access", ticketsSold: 20, totalTickets: 52 },
@@ -20,6 +21,7 @@ const MAX_TICKETS = 6;
 
 const CardPagination = () => {
   const [page, setPage] = useState(1);
+  const { isGoodToGo, isAuthenticated } = useAuthContext(); // Get isAuthenticated from AuthContext
   const [pricingOptions, setPricingOptions] = useState(initialPricingOptions);
   const [selectedPrice, setSelectedPrice] = useState(
     localStorage.getItem("selectedPrice") ? parseInt(localStorage.getItem("selectedPrice")) : null
@@ -27,7 +29,6 @@ const CardPagination = () => {
   const [selectedTickets, setSelectedTickets] = useState(
     localStorage.getItem("selectedTickets") ? parseInt(localStorage.getItem("selectedTickets")) : 1
   );
-
   const [error, setError] = useState("");
 
   const maxPage = 3;
@@ -58,14 +59,16 @@ const CardPagination = () => {
         setError(`Please select between ${MIN_TICKETS} and ${MAX_TICKETS} tickets.`);
         return;
       }
+    }
 
-      setPricingOptions((prevOptions) =>
-        prevOptions.map((option) =>
-          option.price === selectedPrice
-            ? { ...option, ticketsSold: option.ticketsSold + selectedTickets }
-            : option
-        )
-      );
+    if (page === 2 && !isGoodToGo) {
+      setError("Please upload a profile picture.");
+      return;
+    }
+
+    if (page === 2 && !isAuthenticated) {
+      setError("Please authenticate to proceed.");
+      return;
     }
 
     setError("");
@@ -140,24 +143,33 @@ const CardPagination = () => {
             <div className="flex justify-center w-full">
               <EventForm onSave={(data) => setEventData(data)} />
             </div>
+            {error && <p className="text-red-500 text-sm mt-3">{error}</p>}
           </>
         ) : (
-          <TicketCard/>
+          <TicketCard />
         )}
       </div>
 
       <div className="flex justify-between mt-4">
         <button
           onClick={handlePrevious}
-          className={`py-2 px-4 rounded flex items-center transition-all ${page === 1 ? "opacity-50 cursor-not-allowed bg-gray-500" : "bg-blue-500 text-white hover:bg-blue-600"}`}
+          className={`py-3 px-6 rounded-lg flex items-center transition-all ${
+            page === 1
+              ? "opacity-50 cursor-not-allowed bg-transparent border border-gray-500 text-gray-500"
+              : "bg-transparent border border-[#24A0B5] text-[#24A0B5] hover:bg-[#24A0B5] hover:text-white"
+          }`}
           disabled={page === 1}
         >
           <ChevronLeft className="w-4 h-4 mr-2" /> Previous
         </button>
         <button
           onClick={handleNext}
-          className={`py-2 px-4 rounded flex items-center transition-all ${page === maxPage ? "opacity-50 cursor-not-allowed bg-gray-500" : "bg-blue-500 text-white hover:bg-blue-600"}`}
-          disabled={page === maxPage}
+          className={`py-3 px-6 rounded-lg flex items-center transition-all ${
+            page === maxPage || (page === 2 && !isGoodToGo) || (page >= 2 && !isAuthenticated)
+              ? "opacity-50 cursor-not-allowed bg-gray-500"
+              : "bg-[#1E3A8A] text-white hover:bg-[#1E40AF]"
+          }`}
+          disabled={page === maxPage || (page === 2 && !isGoodToGo) || (page >= 2 && !isAuthenticated)} // Disable if not authenticated on page 2 or beyond
         >
           Next <ChevronRight className="w-4 h-4 ml-2" />
         </button>

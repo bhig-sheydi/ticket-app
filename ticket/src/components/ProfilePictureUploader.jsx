@@ -1,21 +1,32 @@
 import { useState, useEffect } from "react";
 import { CloudUpload } from "lucide-react";
 import Dialog from "./Dialog";
-import { useAuthContext } from "../contexts/AuthContext"; 
-
+import { useAuthContext } from "../contexts/AuthContext";
 
 const ProfilePictureUploader = ({ onUpload }) => {
-    const { setIsGoodToGo } = useAuthContext(); 
+    const { setIsGoodToGo } = useAuthContext();
     const [imageUrl, setImageUrl] = useState(localStorage.getItem("avatar") || "");
     const [dragging, setDragging] = useState(false);
     const [error, setError] = useState("");
     const [dialogOpen, setDialogOpen] = useState(false);
 
+
     useEffect(() => {
-        setIsGoodToGo(false)
-        if (imageUrl) {
+        const storedImageUrl = localStorage.getItem("avatar") || "";
+        if (storedImageUrl.length > 0) {
+            setIsGoodToGo(true);
+        } else {
+            setIsGoodToGo(false);
+        }
+    }, [setIsGoodToGo]);
+
+    useEffect(() => {
+        if (imageUrl.length > 0) {
             localStorage.setItem("avatar", imageUrl);
-            setIsGoodToGo(true); 
+            setIsGoodToGo(true);
+        } else {
+            localStorage.removeItem("avatar");
+            setIsGoodToGo(false);
         }
     }, [imageUrl, setIsGoodToGo]);
 
@@ -57,7 +68,7 @@ const ProfilePictureUploader = ({ onUpload }) => {
 
     const handleUrlUpload = (event) => {
         const url = event.target.value;
-        if (url.startsWith("http") && (url.includes("cloudinary") || url.match(/(png|jpe?g|gif)$/))) {
+        if (url.startsWith("http") && (url.includes("cloudinary") || url.match(/\.(png|jpe?g|gif)$/))) {
             setImageUrl(url);
             onUpload(url);
             setError("");
