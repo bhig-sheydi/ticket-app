@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"; 
 import EventContainer from "./EventContainer";
 
-const EventForm = () => {
+const EventForm = ({ onNext }) => {
   const getStoredValue = (key) => localStorage.getItem(key) || "";
 
   const [formData, setFormData] = useState({
@@ -10,7 +10,8 @@ const EventForm = () => {
     specialRequests: getStoredValue("specialRequests"),
   });
 
-  const [errors, setErrors] = useState({ name: "", email: "" });
+  const [errors, setErrors] = useState({ name: "", email: "", specialRequests: "" });
+  const [isValid, setIsValid] = useState(false); // To track if the form is valid
 
   useEffect(() => {
     Object.keys(formData).forEach((key) => {
@@ -22,49 +23,43 @@ const EventForm = () => {
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
+  const validateForm = () => {
+    const nameError = !formData.name.trim() ? "Name is required" : "";
+    const emailError = !validateEmail(formData.email) ? "Invalid email format" : "";
+    const specialRequestsError = !formData.specialRequests.trim() ? "Special requests cannot be empty" : "";
+
+    setErrors({ name: nameError, email: emailError, specialRequests: specialRequestsError });
+
+    // Only set form as valid if no errors
+    setIsValid(!nameError && !emailError && !specialRequestsError);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-
-    if (name === "email") {
-      setErrors((prev) => ({
-        ...prev,
-        email: validateEmail(value) ? "" : "Invalid email format",
-      }));
-    }
-
-    if (name === "name") {
-      setErrors((prev) => ({
-        ...prev,
-        name: value.trim().length > 0 ? "" : "Name is required",
-      }));
-    }
   };
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    // Validate the form whenever data changes
+    validateForm();
+  }, [formData]);
+
+  const handleNext = (e) => {
     e.preventDefault();
-    if (!formData.name.trim()) {
-      setErrors((prev) => ({ ...prev, name: "Name is required" }));
-      return;
+    if (isValid) {
+      onNext();  // Call the onNext function if form is valid
+    } else {
+      alert("Please fill out all fields correctly.");
     }
-    if (!validateEmail(formData.email)) {
-      setErrors((prev) => ({ ...prev, email: "Invalid email format" }));
-      return;
-    }
-    alert("Form submitted successfully!");
   };
 
   return (
-    <EventContainer>
+    
       <form
-        className="p-6 border border-[#71A7AF] rounded-2xl w-full max-w-lg bg-[#133D44] shadow-lg text-white space-y-4 md:space-y-6"
-        onSubmit={handleSubmit}
+        className="p-6 border-t-4 mt-10 border-[#71A7AF] rounded-2xl w-full max-w-lg  shadow-lg text-white space-y-4 md:space-y-6 text-left"
+        onSubmit={handleNext} // Trigger validation and move to the next step
       >
-        <h2 className="text-xl md:text-2xl font-bold text-center">
-          🎟 Register for the Event
-        </h2>
-
-        <div>
+        <div className="text-left">
           <label htmlFor="name" className="block font-medium mb-1">
             Full Name
           </label>
@@ -81,7 +76,7 @@ const EventForm = () => {
           {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
         </div>
 
-        <div>
+        <div className="text-left">
           <label htmlFor="email" className="block font-medium mb-1">
             Email Address
           </label>
@@ -98,7 +93,7 @@ const EventForm = () => {
           {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
         </div>
 
-        <div>
+        <div className="text-left">
           <label htmlFor="specialRequests" className="block font-medium mb-1">
             Special Requests
           </label>
@@ -109,18 +104,21 @@ const EventForm = () => {
             onChange={handleChange}
             className="w-full p-3 border border-[#24A0B5] rounded-lg bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#24A0B5] h-32"
             placeholder="Any special requests?"
+            required
           />
+          {errors.specialRequests && <p className="text-red-500 text-sm mt-1">{errors.specialRequests}</p>}
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-[#24A0B5] hover:bg-[#1B7C91] transition-all duration-300 text-white font-semibold p-3 rounded-lg shadow-md"
-        >
-          Submit
-        </button>
+        <div className="text-center">
+          <button
+            type="submit"
+            className="mt-4 py-2 px-6 bg-blue-500 text-white rounded-full"
+          >
+            Next
+          </button>
+        </div>
       </form>
-    </EventContainer>
-  );
+   );
 };
 
 export default EventForm;
