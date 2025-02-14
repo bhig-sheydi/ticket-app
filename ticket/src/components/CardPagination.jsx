@@ -129,10 +129,10 @@ const CardPagination = () => {
       </div>
 
   
-      <div className="flex justify-between items-center mt-4">
+      <div className="flex justify-center gap-10 items-center mt-4 pl-30 pr-50">
         <button
           onClick={handlePrev}
-          className={`py-2 px-4 rounded flex items-center transition-all ${page === 1 ? "opacity-50 cursor-not-allowed bg-gray-500" : "bg-gray-500 text-white hover:bg-gray-600"}`}
+          className={`py-2 px-4 rounded w-full bg-[#24A0B5] h-10 flex items-center transition-all ${page === 1 ? "opacity-50 cursor-not-allowed bg-gray-500" : "bg-gray-500 text-white hover:bg-gray-600"}`}
           disabled={page === 1}
         >
           <ChevronLeft className="w-4 h-4 mr-2" /> Prev
@@ -140,7 +140,7 @@ const CardPagination = () => {
 
         <button
           onClick={handleNext}
-          className={`py-2 px-4 rounded flex items-center transition-all ${page === maxPage ? "opacity-50 cursor-not-allowed bg-gray-500" : "bg-blue-500 text-white hover:bg-blue-600"}`}
+          className={`py-2 px-4 rounded h-10  flex w-full items-center transition-all ${page === maxPage ? "opacity-50 cursor-not-allowed bg-gray-500" : " bg-[#24A0B5] text-white hover:bg-blue-600"}`}
           disabled={page === maxPage}
         >
           Next <ChevronRight className="w-4 h-4 ml-2" />
