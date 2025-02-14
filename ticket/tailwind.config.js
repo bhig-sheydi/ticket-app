@@ -8,7 +8,7 @@ export default {
         },
   
         fontFamily: {
-          jeju: ['"Jeju Myeongjo"', 'serif'], // ✅ Add space inside the font name
+          roadRage: ['Road Rage', 'cursive'],
         },
       },
     },

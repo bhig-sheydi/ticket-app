@@ -14,7 +14,7 @@ function App() {
         <Routes>
           <Route path="/"element={<Events />} />
            <Route path="/my-tickets" element={<TicketCard/>} />
-          {/* <Route path="/about" element={<AboutProject />} />  */}
+          
         </Routes>
       </div>
     </Router>
