@@ -73,7 +73,7 @@ const ProfilePictureUploader = ({ onUpload }) => {
                             className="w-full h-full object-cover rounded-full absolute inset-0"
                         />
                     )}
-                    {/* Icon and Write-up (Always Visible) */}
+        
                     {!imageUrl && (
                         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-xs md:text-sm bg-black bg-opacity-10 hover:bg-opacity-20 rounded-full transition duration-200">
                             <CloudUpload className="w-8 h-8 md:w-10 md:h-10 text-white" />

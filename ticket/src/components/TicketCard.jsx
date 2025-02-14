@@ -44,7 +44,7 @@ const TicketCard = () => {
             
             <div className="absolute top-[3%] left-0 w-full h-full flex flex-col items-center justify-center">
               <TicketUi ticket={ticket} />
-              <TicketActions barcode={ticket.barcode} className="mt-4" /> {/* Added margin-top */}
+              <TicketActions barcode={ticket.barcode} className="mt-4" /> 
             </div>
           </div>
         </div>

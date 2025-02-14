@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"; 
-import EventContainer from "./EventContainer";
+
 
 const EventForm = ({ onNext }) => {
   const getStoredValue = (key) => localStorage.getItem(key) || "";
@@ -11,7 +11,7 @@ const EventForm = ({ onNext }) => {
   });
 
   const [errors, setErrors] = useState({ name: "", email: "", specialRequests: "" });
-  const [isValid, setIsValid] = useState(false); // To track if the form is valid
+  const [isValid, setIsValid] = useState(false); 
 
   useEffect(() => {
     Object.keys(formData).forEach((key) => {
@@ -30,7 +30,7 @@ const EventForm = ({ onNext }) => {
 
     setErrors({ name: nameError, email: emailError, specialRequests: specialRequestsError });
 
-    // Only set form as valid if no errors
+    
     setIsValid(!nameError && !emailError && !specialRequestsError);
   };
 
@@ -40,14 +40,14 @@ const EventForm = ({ onNext }) => {
   };
 
   useEffect(() => {
-    // Validate the form whenever data changes
+    
     validateForm();
   }, [formData]);
 
   const handleNext = (e) => {
     e.preventDefault();
     if (isValid) {
-      onNext();  // Call the onNext function if form is valid
+      onNext();  
     } else {
       alert("Please fill out all fields correctly.");
     }
@@ -57,7 +57,7 @@ const EventForm = ({ onNext }) => {
     
       <form
         className="p-6 border-t-4 mt-10 border-[#71A7AF] rounded-2xl w-full max-w-lg  shadow-lg text-white space-y-4 md:space-y-6 text-left"
-        onSubmit={handleNext} // Trigger validation and move to the next step
+        onSubmit={handleNext}
       >
         <div className="text-left">
           <label htmlFor="name" className="block font-medium mb-1">

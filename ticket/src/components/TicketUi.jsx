@@ -54,8 +54,8 @@ const TicketUi = () => {
         />
       </div>
 
-      {/* Grid Layout for Details */}
-      <div className="mt-4 bg-[#102b47] p-4 rounded-lg text-[10px] grid grid-cols-2 gap-2">
+  
+      <div className="mt-4  p-4 rounded-lg text-[10px] grid grid-cols-2 gap-2">
         <div className="overflow-hidden">
           <p className="text-[10px]">Name:</p>
           <p className="text-wrap">{ticket.name || "N/A"}</p>
@@ -73,7 +73,7 @@ const TicketUi = () => {
           <p className="text-wrap">{ticket.ticketFor || "N/A"}</p>
         </div>
 
-        {/* Special Request */}
+      
         <div className="col-span-2 mt-2">
           <p className="text-[10px]">Special Request:</p>
           <textarea

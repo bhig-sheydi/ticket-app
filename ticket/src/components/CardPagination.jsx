@@ -6,7 +6,6 @@ import EventContainer from "./EventContainer";
 import TicketNumberSelector from "./TicketNumberSelector";
 import ProfilePictureUploader from "./ProfilePictureUploader";
 import EventForm from "./EventForm";
-import TicketUi from "./TicketUi"; // Import TicketUi component
 import TicketCard from "./TicketCard";
 
 const initialPricingOptions = [
