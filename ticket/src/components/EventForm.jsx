@@ -36,12 +36,12 @@ const EventForm = ({ onNext }) => {
   const handleNext = (e) => {
     e.preventDefault();
     if (isValid) {
-      // Save to localStorage on submit
+      
       Object.keys(formData).forEach((key) => {
         localStorage.setItem(key, formData[key]);
       });
 
-      onNext(); // Proceed to the next step
+      onNext(); 
     } else {
       alert("Please fill out all fields correctly.");
     }
