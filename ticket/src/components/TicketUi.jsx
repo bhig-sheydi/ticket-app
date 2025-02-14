@@ -35,8 +35,8 @@ const TicketUi = () => {
   }, []);
 
   return (
-    <div className="relative bg-transparent p-6 rounded-xl shadow-lg border border-[#1e3a5f] w-[90%] max-w-sm text-white">
-      <h2 className="text-xl font-bold text-center">{ticket.eventName}</h2>
+<div className="relative bg-transparent p-6 rounded-xl shadow-lg border border-[#1e3a5f] w-[90%] max-w-sm text-white h-[350px] sm:h-[375px]">
+<h2 className="text-xl font-bold text-center">{ticket.eventName}</h2>
 
       <div className="flex items-center justify-center gap-2 text-gray-400 text-sm mt-3">
         <FaMapMarkerAlt /> <span>{ticket.location}</span>
