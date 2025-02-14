@@ -14,7 +14,7 @@ const EventCard = () => {
         }}
       ></div>
 
-      <h1 className="text-2xl sm:text-5xl font-bold relative z-10 roadRage">
+      <h1 className="text-4xl sm:text-5xl font-bold relative z-10 roadRage">
         Techember Fest ’25
       </h1>
       <p className="mt-2 text-gray-300  relative z-10 text-[#FAFAFA] text-sm sm:text-base font-roadRage">
