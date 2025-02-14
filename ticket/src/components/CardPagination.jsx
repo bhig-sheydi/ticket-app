@@ -26,12 +26,8 @@ const CardPagination = () => {
   const [selectedTickets, setSelectedTickets] = useState(
     localStorage.getItem("selectedTickets") ? parseInt(localStorage.getItem("selectedTickets")) : 1
   );
-  const [profilePicture, setProfilePicture] = useState(
-    localStorage.getItem("profilePicture") ? localStorage.getItem("profilePicture") : null
-  );
-  const [eventData, setEventData] = useState(
-    localStorage.getItem("eventData") ? JSON.parse(localStorage.getItem("eventData")) : {}
-  );
+
+
   const [error, setError] = useState("");
 
   const maxPage = 3;
@@ -52,17 +48,6 @@ const CardPagination = () => {
     localStorage.setItem("selectedTickets", selectedTickets);
   }, [selectedTickets]);
 
-  useEffect(() => {
-    if (profilePicture) {
-      localStorage.setItem("profilePicture", profilePicture);
-    }
-  }, [profilePicture]);
-
-  useEffect(() => {
-    if (Object.keys(eventData).length > 0) {
-      localStorage.setItem("eventData", JSON.stringify(eventData));
-    }
-  }, [eventData]);
 
   const handleNext = () => {
     if (page === 1) {
@@ -152,16 +137,7 @@ const CardPagination = () => {
             </div>
           </>
         ) : (
-          <TicketUi
-            selectedPrice={selectedPrice}
-            selectedTickets={selectedTickets}
-            profilePicture={profilePicture}
-            eventData={eventData}
-            ticketType={
-              pricingOptions.find((option) => option.price === selectedPrice)?.accessType ||
-              (selectedPrice === 0 ? "Regular Access" : selectedPrice === 100 ? "Premium Access" : "VIP Access")
-            }
-          />
+          <TicketUi/>
         )}
       </div>
 

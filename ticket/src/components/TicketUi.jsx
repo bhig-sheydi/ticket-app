@@ -12,7 +12,7 @@ const TicketUi = () => {
     const ticketType = localStorage.getItem("selectedPrice");
 
     const ticketTypeLabel =
-      ticketType === "100" ? "VIP" : ticketType === "150" ? "VVIP" : ticketType === "free" ? "Regular" : "N/A";
+      ticketType === "100" ? "VIP" : ticketType === "150" ? "VVIP" : ticketType === "0" ? "Regular" : "N/A";
 
     return {
       eventName: "Techember Fest '25",

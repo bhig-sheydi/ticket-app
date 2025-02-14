@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"; 
+import React, { useState, useEffect } from "react";
 import ticketFrame from "../assets/images/bg.png";
 import TicketUi from "./TicketUi";
 import TicketActions from "./TicketActions";
@@ -37,21 +37,19 @@ const TicketCard = () => {
     }, []);
 
     return (
-        <div className="flex items-center justify-center w-full px-4">
-            <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
-                {/* Responsive Ticket Frame Image */}
-                <img src={ticketFrame} alt="Ticket Frame" className="w-full h-auto" />
-
-                {/* Ticket UI & Actions Positioned Responsively */}
-                <div className="absolute top-[3%] left-0 w-full h-full flex flex-col items-center px-4">
-                    <TicketUi ticket={ticket} />
-                    <div className="w-full mt-4">
-                        <TicketActions barcode={ticket.barcode} />
-                    </div>
-                </div>
+        <div className="flex items-center justify-center relative w-full">
+          <div className="relative">
+            <img src={ticketFrame} alt="Ticket Frame" className="w-full h-auto" />
+      
+            
+            <div className="absolute top-[3%] left-0 w-full h-full flex flex-col items-center justify-center">
+              <TicketUi ticket={ticket} />
+              <TicketActions barcode={ticket.barcode} className="mt-4" /> {/* Added margin-top */}
             </div>
+          </div>
         </div>
-    );
+      );
+      
 };
 
 export default TicketCard;
