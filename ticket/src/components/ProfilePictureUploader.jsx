@@ -15,15 +15,6 @@ const ProfilePictureUploader = ({ onUpload }) => {
         setIsGoodToGo(imageUrl.length > 0);
     }, [imageUrl, setIsGoodToGo]);
 
-    const fetchAuthenticatedUser = async () => {
-        const { data, error } = await supabase.auth.getUser();
-        if (error) {
-            console.error("Error fetching user:", error);
-            return null;
-        }
-        return data?.user;
-    };
-
     const handleDragOver = (event) => {
         event.preventDefault();
         setDragging(true);
@@ -52,15 +43,9 @@ const ProfilePictureUploader = ({ onUpload }) => {
             return;
         }
 
-        const user = await fetchAuthenticatedUser();
-        if (!user) {
-            setError("You must be logged in to upload.");
-            setDialogOpen(true);
-            return;
-        }
-
+        // Remove the authentication check
         const sanitizedFileName = file.name.replace(/\s+/g, "_"); // Replace spaces with underscores
-        const filePath = `avatars/${user.id}/${Date.now()}-${sanitizedFileName}`;
+        const filePath = `avatars/${Date.now()}-${sanitizedFileName}`; // Removed user ID from the path
 
         const { error: uploadError } = await supabase.storage
             .from("hng_test")
