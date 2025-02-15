@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";     
+import { useEffect, useState } from "react";      
 import { FaMapMarkerAlt, FaCalendarAlt } from "react-icons/fa";
 
 const TicketUi = () => {
@@ -35,49 +35,49 @@ const TicketUi = () => {
   }, []);
 
   return (
-    <div className="relative bg-transparent p-4 rounded-xl shadow-lg border border-[#1e3a5f] w-[90%] max-w-sm text-white h-[420px] sm:h-[450px]">
-      <h2 className="text-4xl font-normal text-center roadRage">{ticket.eventName}</h2>
+    <div className="relative bg-transparent p-3 rounded-xl shadow-lg border border-[#1e3a5f] w-[90%] max-w-sm 
+    h-[350px] sm:h-[450px] text-white">
+      <h2 className="text-3xl sm:text-4xl font-normal text-center roadRage">{ticket.eventName}</h2>
 
-      <div className="flex items-center justify-center gap-1 text-gray-400 text-[10px] mt-3">
+      <div className="flex items-center justify-center gap-1 text-gray-400 text-[8px] sm:text-[10px] mt-2 sm:mt-3">
         <FaMapMarkerAlt /> <span>{ticket.location}</span>
       </div>
 
-      <div className="flex items-center justify-center gap-1 text-gray-400 text-[10px] mt-1">
+      <div className="flex items-center justify-center gap-1 text-gray-400 text-[8px] sm:text-[10px] mt-1">
         <FaCalendarAlt /> <span>{ticket.date}</span>
       </div>
 
-      <div className="mt-4 flex justify-center w-full">
+      <div className="mt-3 sm:mt-4 flex justify-center w-full">
         <img
           src={ticket.profilePicture}
           alt="User"
-          className="w-25 h-25 object-cover rounded-lg border-2 border-[#1e3a5f]"
+          className="w-20 h-20 sm:w-25 sm:h-25 object-cover rounded-lg border-2 border-[#1e3a5f]"
         />
       </div>
 
-  
-      <div className="mt-4  p-4 rounded-lg text-[10px] grid grid-cols-2 gap-2">
+      <div className="mt-3 sm:mt-4 p-3 sm:p-4 rounded-lg text-[8px] sm:text-[10px] grid grid-cols-2 gap-2">
         <div className="overflow-hidden">
-          <p className="text-[10px]">Name:</p>
+          <p className="text-[8px] sm:text-[10px]">Name:</p>
           <p className="text-wrap">{ticket.name || "N/A"}</p>
         </div>
         <div className="overflow-hidden">
-          <p className="text-[10px]">Email:</p>
+          <p className="text-[8px] sm:text-[10px]">Email:</p>
           <p className="text-wrap">{ticket.email || "N/A"}</p>
         </div>
         <div className="overflow-hidden">
-          <p className="text-[10px]">Ticket Type:</p>
+          <p className="text-[8px] sm:text-[10px]">Ticket Type:</p>
           <p className="text-wrap">{ticket.ticketType}</p>
         </div>
         <div className="overflow-hidden">
-          <p className="text-[10px]">Ticket For:</p>
+          <p className="text-[8px] sm:text-[10px]">Ticket For:</p>
           <p className="text-wrap">{ticket.ticketFor || "N/A"}</p>
         </div>
 
-      
-        <div className="col-span-2 mt-2">
-          <p className="text-[10px]">Special Request:</p>
+        <div className="col-span-2 mt-1 sm:mt-2">
+          <p className="text-[8px] sm:text-[10px]">Special Request:</p>
           <textarea
-            className="w-full bg-transparent border border-gray-600 p-1 rounded-lg text-white resize-none text-[10px] h-10"
+            className="w-full bg-transparent border border-gray-600 p-1 rounded-lg text-white resize-none 
+            text-[8px] sm:text-[10px] h-8 sm:h-10"
             value={ticket.specialRequest || "No special request"}
             readOnly
           />
