@@ -26,15 +26,6 @@ const ProfilePictureUploader = ({ onUpload }) => {
         }
     }, [imageUrl, setIsGoodToGo]);
 
-    const fetchAuthenticatedUser = async () => {
-        const { data: { user }, error } = await supabase.auth.getUser();
-        if (error) {
-            console.error("Error fetching user:", error);
-            return null;
-        }
-        return user;
-    };
-
     const handleDragOver = (event) => {
         event.preventDefault();
         setDragging(true);
@@ -63,14 +54,7 @@ const ProfilePictureUploader = ({ onUpload }) => {
             return;
         }
 
-        const user = await fetchAuthenticatedUser();
-        if (!user) {
-            setError("You must be logged in to upload.");
-            setDialogOpen(true);
-            return;
-        }
-
-        const filePath = `${user.id}/${Date.now()}-${file.name}`;
+        const filePath = `uploads/${Date.now()}-${file.name}`;
 
         const { data, error } = await supabase.storage
             .from("hng_test")
