@@ -12,19 +12,17 @@ const ProfilePictureUploader = ({ onUpload }) => {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     useEffect(() => {
-        const storedImageUrl = localStorage.getItem("avatar") || "";
-        setIsGoodToGo(storedImageUrl.length > 0);
-    }, [setIsGoodToGo]);
-
-    useEffect(() => {
-        if (imageUrl.length > 0) {
-            localStorage.setItem("avatar", imageUrl);
-            setIsGoodToGo(true);
-        } else {
-            localStorage.removeItem("avatar");
-            setIsGoodToGo(false);
-        }
+        setIsGoodToGo(imageUrl.length > 0);
     }, [imageUrl, setIsGoodToGo]);
+
+    const fetchAuthenticatedUser = async () => {
+        const { data, error } = await supabase.auth.getUser();
+        if (error) {
+            console.error("Error fetching user:", error);
+            return null;
+        }
+        return data?.user;
+    };
 
     const handleDragOver = (event) => {
         event.preventDefault();
@@ -54,27 +52,32 @@ const ProfilePictureUploader = ({ onUpload }) => {
             return;
         }
 
-        const filePath = `uploads/${Date.now()}-${file.name}`;
+        const user = await fetchAuthenticatedUser();
+        if (!user) {
+            setError("You must be logged in to upload.");
+            setDialogOpen(true);
+            return;
+        }
 
-        const { data, error } = await supabase.storage
+        const sanitizedFileName = file.name.replace(/\s+/g, "_"); // Replace spaces with underscores
+        const filePath = `avatars/${user.id}/${Date.now()}-${sanitizedFileName}`;
+
+        const { error: uploadError } = await supabase.storage
             .from("hng_test")
-            .upload(filePath, file, {
-                cacheControl: "3600",
-                upsert: false,
-            });
+            .upload(filePath, file, { cacheControl: "3600", upsert: false });
 
-        if (error) {
+        if (uploadError) {
+            console.error("Supabase Upload Error:", uploadError);
             setError("Failed to upload image. Please try again.");
             setDialogOpen(true);
             return;
         }
 
-        const { data: publicUrlData } = supabase.storage
-            .from("hng_test")
-            .getPublicUrl(filePath);
+        // Get the public URL of the uploaded file
+        const { data: publicUrlData } = supabase.storage.from("hng_test").getPublicUrl(filePath);
+        const publicUrl = publicUrlData?.publicUrl;
 
-        if (publicUrlData) {
-            const publicUrl = publicUrlData.publicUrl;
+        if (publicUrl) {
             setImageUrl(publicUrl);
             localStorage.setItem("avatar", publicUrl);
             onUpload(publicUrl);
