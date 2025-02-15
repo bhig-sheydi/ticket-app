@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { CloudUpload } from "lucide-react";
-import { supabase } from "../supabaseConfig";
+import { supabase } from "../../supabaseConfig";
 import Dialog from "./Dialog";
 import { useAuthContext } from "../contexts/AuthContext";
 
