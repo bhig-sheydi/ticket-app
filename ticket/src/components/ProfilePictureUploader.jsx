@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { CloudUpload } from "lucide-react";
+import { supabase } from "../supabaseConfig";
 import Dialog from "./Dialog";
 import { useAuthContext } from "../contexts/AuthContext";
 
@@ -10,14 +11,9 @@ const ProfilePictureUploader = ({ onUpload }) => {
     const [error, setError] = useState("");
     const [dialogOpen, setDialogOpen] = useState(false);
 
-
     useEffect(() => {
         const storedImageUrl = localStorage.getItem("avatar") || "";
-        if (storedImageUrl.length > 0) {
-            setIsGoodToGo(true);
-        } else {
-            setIsGoodToGo(false);
-        }
+        setIsGoodToGo(storedImageUrl.length > 0);
     }, [setIsGoodToGo]);
 
     useEffect(() => {
@@ -29,6 +25,15 @@ const ProfilePictureUploader = ({ onUpload }) => {
             setIsGoodToGo(false);
         }
     }, [imageUrl, setIsGoodToGo]);
+
+    const fetchAuthenticatedUser = async () => {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error) {
+            console.error("Error fetching user:", error);
+            return null;
+        }
+        return user;
+    };
 
     const handleDragOver = (event) => {
         event.preventDefault();
@@ -46,7 +51,7 @@ const ProfilePictureUploader = ({ onUpload }) => {
         handleFileUpload(file);
     };
 
-    const handleFileUpload = (file) => {
+    const handleFileUpload = async (file) => {
         if (!file || !file.type.startsWith("image/")) {
             setError("Please upload a valid image file.");
             setDialogOpen(true);
@@ -57,30 +62,45 @@ const ProfilePictureUploader = ({ onUpload }) => {
             setDialogOpen(true);
             return;
         }
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setImageUrl(reader.result);
-            onUpload(reader.result);
-            setError("");
-        };
-        reader.readAsDataURL(file);
-    };
 
-    const handleUrlUpload = (event) => {
-        const url = event.target.value;
-        if (url.startsWith("http") && (url.includes("cloudinary") || url.match(/\.(png|jpe?g|gif)$/))) {
-            setImageUrl(url);
-            onUpload(url);
-            setError("");
-        } else {
-            setError("Please enter a valid Cloudinary or external image URL.");
+        const user = await fetchAuthenticatedUser();
+        if (!user) {
+            setError("You must be logged in to upload.");
             setDialogOpen(true);
+            return;
+        }
+
+        const filePath = `${user.id}/${Date.now()}-${file.name}`;
+
+        const { data, error } = await supabase.storage
+            .from("hng_test")
+            .upload(filePath, file, {
+                cacheControl: "3600",
+                upsert: false,
+            });
+
+        if (error) {
+            setError("Failed to upload image. Please try again.");
+            setDialogOpen(true);
+            return;
+        }
+
+        const { data: publicUrlData } = supabase.storage
+            .from("hng_test")
+            .getPublicUrl(filePath);
+
+        if (publicUrlData) {
+            const publicUrl = publicUrlData.publicUrl;
+            setImageUrl(publicUrl);
+            localStorage.setItem("avatar", publicUrl);
+            onUpload(publicUrl);
+            setError("");
         }
     };
 
     return (
-        <div className="flex flex-col items-center p-6 border rounded-lg w-full max-w-sm md:max-w-md lg:max-w-lg text-center border-[#07373F] relative space-y-4">
-            <p className="absolute top-2 left-2 text-white text-sm md:text-base">Upload Profile Picture</p>
+        <div className="flex flex-col items-center p-6 border rounded-lg w-full max-w-sm text-center border-[#07373F] relative space-y-4">
+            <p className="absolute top-2 left-2 text-white text-sm">Upload Profile Picture</p>
             <div 
                 className={`bg-[#0A2A35] w-full flex justify-center relative mt-8 p-4 rounded-lg cursor-pointer transition ${
                     dragging ? "border-2 border-dashed border-[#24A0B5]" : ""
@@ -90,7 +110,7 @@ const ProfilePictureUploader = ({ onUpload }) => {
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
             >
-                <div className="w-32 h-32 md:w-40 md:h-40 border-2 rounded-full flex items-center justify-center bg-[#0E464F] opacity-35 border-4 border-[#24A0B5] text-gray-500 relative">
+                <div className="w-32 h-32 border-2 rounded-full flex items-center justify-center bg-[#0E464F] opacity-35 border-4 border-[#24A0B5] text-gray-500 relative">
                     {imageUrl && (
                         <img 
                             src={imageUrl} 
@@ -100,8 +120,8 @@ const ProfilePictureUploader = ({ onUpload }) => {
                     )}
         
                     {!imageUrl && (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-xs md:text-sm bg-black bg-opacity-10 hover:bg-opacity-20 rounded-full transition duration-200">
-                            <CloudUpload className="w-8 h-8 md:w-10 md:h-10 text-white" />
+                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-xs bg-black bg-opacity-10 hover:bg-opacity-20 rounded-full transition duration-200">
+                            <CloudUpload className="w-8 h-8 text-white" />
                             <p className="text-white">Drag & Drop or Click to Upload</p>
                         </div>
                     )}
@@ -114,12 +134,6 @@ const ProfilePictureUploader = ({ onUpload }) => {
                 accept="image/*" 
                 className="hidden" 
                 onChange={(e) => handleFileUpload(e.target.files[0])}
-            />
-            <input
-                type="text"
-                placeholder="Or paste image URL"
-                className="mt-4 p-3 border rounded w-full text-xs md:text-sm"
-                onBlur={handleUrlUpload}
             />
             
             {dialogOpen && (
