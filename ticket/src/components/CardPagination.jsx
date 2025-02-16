@@ -151,28 +151,32 @@ const CardPagination = () => {
       </div>
 
       <div className="flex justify-between mt-4">
-        <button
-          onClick={handlePrevious}
-          className={`py-3 px-6 rounded-lg flex items-center transition-all ${
-            page === 1
-              ? "opacity-50 cursor-not-allowed bg-transparent border border-gray-500 text-gray-500"
-              : "bg-transparent border border-[#24A0B5] text-[#24A0B5] hover:bg-[#24A0B5] hover:text-white"
-          }`}
-          disabled={page === 1}
-        >
-          <ChevronLeft className="w-4 h-4 mr-2" /> Previous
-        </button>
-        <button
-          onClick={handleNext}
-          className={`py-3 px-6 rounded-lg flex items-center transition-all ${
-            page === maxPage || (page === 2 && !isGoodToGo) || (page >= 2 && !isAuthenticated)
-              ? "opacity-50 cursor-not-allowed bg-gray-500"
-              : "bg-[#1E3A8A] text-white hover:bg-[#1E40AF]"
-          }`}
-          disabled={page === maxPage || (page === 2 && !isGoodToGo) || (page >= 2 && !isAuthenticated)} // Disable if not authenticated on page 2 or beyond
-        >
-          Next <ChevronRight className="w-4 h-4 ml-2" />
-        </button>
+      <div className="flex flex-col sm:flex-row sm:justify-between w-full">
+  <button 
+    onClick={handlePrevious}
+    className={`py-3 px-6 rounded-md flex items-center justify-center transition-all text-lg font-medium border ${
+      page === 1
+        ? "opacity-50 cursor-not-allowed bg-transparent border-gray-500 text-gray-500"
+        : "bg-transparent border-[#24A0B5] text-[#24A0B5] hover:bg-[#24A0B5] hover:text-white"
+    }`}
+    disabled={page === 1}
+  >
+    <ChevronLeft className="w-5 h-5 mr-2" /> Previous
+  </button>
+
+  <button
+    onClick={handleNext}
+    className={`py-3 px-6 rounded-md flex items-center justify-center transition-all text-lg font-medium border ${
+      page === maxPage || (page === 2 && !isGoodToGo) || (page >= 2 && !isAuthenticated)
+        ? "opacity-50 cursor-not-allowed bg-gray-500 border-gray-500 text-white"
+        : "bg-[#007B8F] text-white border-[#007B8F] hover:bg-[#005F6B]"
+    }`}
+    disabled={page === maxPage || (page === 2 && !isGoodToGo) || (page >= 2 && !isAuthenticated)}
+  >
+    Next <ChevronRight className="w-5 h-5 ml-2" />
+  </button>
+</div>
+
       </div>
     </div>
   );
