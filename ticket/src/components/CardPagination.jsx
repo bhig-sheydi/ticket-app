@@ -150,7 +150,6 @@ const CardPagination = () => {
         )}
       </div>
 
-      <div className="flex justify-between mt-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-between w-full">
   <button 
     onClick={handlePrevious}
@@ -173,11 +172,9 @@ const CardPagination = () => {
     }`}
     disabled={page === maxPage || (page === 2 && !isGoodToGo) || (page >= 2 && !isAuthenticated)}
   >
-    Next <ChevronRight className="w-5 h-5 ml-2" />
+    {page === 2 ? "Get My Free Ticket" : "Next"} <ChevronRight className="w-5 h-5 ml-2" />
   </button>
 </div>
-
-      </div>
     </div>
   );
 };
