@@ -150,7 +150,7 @@ const CardPagination = () => {
         )}
       </div>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:justify-between w-full">
+      <div className="flex flex-col gap-2 pt-2 sm:flex-row sm:justify-between w-full">
   <button 
     onClick={handlePrevious}
     className={`py-3 px-6 rounded-md flex items-center justify-center transition-all text-lg font-medium border ${
